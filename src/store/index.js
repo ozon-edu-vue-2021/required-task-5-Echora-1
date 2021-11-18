@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from "axios";
+import getRandomElement from  '../helpers/randomElement';
 
 Vue.use(Vuex);
 
@@ -7,6 +9,14 @@ export default new Vuex.Store({
     state: () => ({
         productList: [],
         cart: [],
+        images:
+            [
+                '/img/6123150777.webp', '/img/6126039472.webp', '/img/6126040354.webp',
+                '/img/6128597660.webp', '/img/6134992334.webp', '/img/6136170572.webp',
+                '/img/6136172483.webp', '/img/6140906765.webp', '/img/6142673815.webp',
+                '/img/6142681673.webp', '/img/6142683276.webp', '/img/6148226736.webp',
+            ],
+        prices: [ '223', '236', '434', '734', '334', '124', '834', '974', '211', '234', '234', '534' ]
     }),
 
     getters: {
@@ -22,7 +32,13 @@ export default new Vuex.Store({
 
     mutations: {
         setProductList: (state, payload) => {
-            state.productList = payload;
+            state.productList = payload.map(item => {
+                return {
+                    ...item,
+                    img: getRandomElement(state.images),
+                    price: getRandomElement(state.prices)
+                }
+            });
         },
 
         addToCart: (state, payload) => {
@@ -35,8 +51,13 @@ export default new Vuex.Store({
     },
 
     actions: {
-        loadProductList(context, list) {
-            context.commit("setProductList", list);
+        loadProductList(context) {
+            axios.get('https://random-data-api.com/api/food/random_food?size=30').then(response => {
+                context.commit("setProductList", response.data)
+            })
+            .catch(e => {
+                console.log(e)
+            })
         },
 
         putCart(context, item) {

@@ -18,21 +18,8 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex"
-import axios from "axios";
 
 export  default  {
-  data() {
-    return {
-      images:
-        [
-          '/img/6123150777.webp', '/img/6126039472.webp', '/img/6126040354.webp',
-          '/img/6128597660.webp', '/img/6134992334.webp', '/img/6136170572.webp',
-          '/img/6136172483.webp', '/img/6140906765.webp', '/img/6142673815.webp',
-          '/img/6142681673.webp', '/img/6142683276.webp', '/img/6148226736.webp',
-        ],
-      prices: [ '223', '236', '434', '734', '334', '124', '834', '974', '211', '234', '234', '534' ]
-    }
-  },
 
   computed: {
     ...mapGetters(["getProductList", "getCart"]),
@@ -40,29 +27,10 @@ export  default  {
 
   methods: {
     ...mapActions(["loadProductList", "putCart"]),
-
-    getRandomElement(arr) {
-      return arr[Math.floor((Math.random()*arr.length))];
-    },
-
-    formatList(list) {
-      return list.map(item => {
-        return {
-          ...item,
-          img: this.getRandomElement(this.images),
-          price: this.getRandomElement(this.prices)
-        }
-      })
-    }
   },
 
   created() {
-    axios.get('https://random-data-api.com/api/food/random_food?size=30').then(response => {
-      this.loadProductList(this.formatList(response.data))
-    })
-    .catch(e => {
-      console.log(e)
-    })
+    this.loadProductList()
   },
 }
 </script>
@@ -73,6 +41,7 @@ export  default  {
 .wrap {
   display: flex;
   align-items: flex-start;
+  justify-content: center;
   background-color: #F2F3F8;
 }
 
@@ -81,6 +50,7 @@ export  default  {
   flex-wrap: wrap;
   border-right: 1px solid black;
   justify-content: center;
+  width: 900px;
 }
 
 .sidebar {
